@@ -1,22 +1,30 @@
-from collections import Counter
-
+import re
 
 def count_words(file_path, n):
     with open(file_path, 'r', encoding='utf-8') as file:
-        words = file.read().split()
-        word_count = Counter(words)
-        most_common = word_count.most_common(n)
-
-        # szuka wszystkie słowa z tą samą częstotliwością występowania co n
-        i = n
-        while i < len(word_count) and word_count.most_common(i+1)[-1][1] == most_common[-1][1]:
-            i += 1
-        ties = word_count.most_common(i)
-
-        return ties
+        text = file.read().lower()
+        text = re.sub(r'[^\w\s]','',text)
+        text = re.sub(r'\d+','',text)
+        words = text.split()
+        word_counts = {}
+        for word in words:
+            if word in word_counts:
+                word_counts[word] += 1
+            else:
+                word_counts[word] = 1
+        sorted_word_counts = sorted(word_counts.items(), key=lambda x: x[1], reverse=True)
+        top_words = [sorted_word_counts[0]]
+        for i in range(1, len(sorted_word_counts)):
+            if sorted_word_counts[i][1] == top_words[-1][1]:
+                top_words.append(sorted_word_counts[i])
+            else:
+                if len(top_words) >= n:
+                    break
+                top_words.append(sorted_word_counts[i])
+        return top_words
 
 file_path = 'potop.txt'
-n = 6
+n = 10
 top_words = count_words(file_path, n)
 
 print(f'Najczęściej występujące słowa ({n}), razem z remisami:')
