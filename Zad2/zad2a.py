@@ -1,13 +1,14 @@
 import re
 
+
 def count_words(file_path, n):
     with open(file_path, 'r', encoding='utf-8') as file:
-        text = file.read().lower()
-        text = re.sub(r'[^\w\s]','',text)
-        text = re.sub(r'\d+','',text)
+        text = file.read().lower()  # zły pomysł; proszę to zrobić z Wikipedią
+        text = re.sub(r'[^\w\s]', '', text)
+        text = re.sub(r'\d+', '', text)
         words = text.split()
         word_counts = {}
-        for word in words:
+        for word in words:  # collections.Counter
             if word in word_counts:
                 word_counts[word] += 1
             else:
@@ -22,6 +23,7 @@ def count_words(file_path, n):
                     break
                 top_words.append(sorted_word_counts[i])
         return top_words
+
 
 file_path = 'potop.txt'
 n = 10
