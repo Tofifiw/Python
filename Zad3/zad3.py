@@ -25,11 +25,11 @@ def cosine_similarity(x1, x2):
     dot_product = np.dot(x1, x2)
     norm_x1 = np.linalg.norm(x1)
     norm_x2 = np.linalg.norm(x2)
-    cosine_similarity = dot_product / (norm_x1 * norm_x2)
-    return cosine_similarity
+    return dot_product / (norm_x1 * norm_x2)
+    
 
 class kNNClassifier:
-    def __init__(self, k, distance_metric='euclidean'):
+    def __init__(self, k, distance_metric='euclidean'):  # czemu nie przyjąć funkcji jako parametr wywołania?
         self.k = k
         self.distance_metric = distance_metric
         self.X_train = None
@@ -38,7 +38,7 @@ class kNNClassifier:
     def train(self, X_train, y_train):
         # Trenowanie klasyfikatora
         # Przykład: Zapisz dane treningowe wewnątrz klasyfikatora
-        self.X_train = np.array(X_train)
+        self.X_train = np.array(X_train)  # a co będzie przy drugim wywołaniu train?
         self.y_train = np.array(y_train)
 
     def predict(self, X_test):
@@ -46,7 +46,7 @@ class kNNClassifier:
         y_pred = []
         for x_test in X_test:
             distances = []
-            for i, x_train in enumerate(self.X_train):
+            for i, x_train in enumerate(self.X_train):  # bardzo niewydajne
                 dist = self.get_distance(x_train, x_test)
                 distances.append((dist, self.y_train[i]))
             distances.sort(key=lambda x: x[0])
